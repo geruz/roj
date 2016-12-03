@@ -1,0 +1,471 @@
+env:
+    browser: false
+    node: true
+    es6: true
+
+globals:
+    process: true
+parserOptions:
+    ecmaVersion: 6
+
+
+plugins:
+    - react
+    - babel
+
+rules:
+
+  # необходима зяпятая после последнего свойства объекта и элемента массива
+  comma-dangle:
+    - 1
+    - always-multiline
+
+  # запрещаем использовать присваивание в условных операторах
+  no-cond-assign:
+    - 2
+    - always
+  # использование консоли
+  no-console: 2
+
+  # запрещено использовать константы в условных операторах
+  no-constant-condition: 2
+
+  # использование символов с кодами 0-31 в регулярных выражениях
+  no-control-regex: 0
+
+  # запрет на использование оператора debuggerж
+  no-debugger: 2
+
+  # запрет на одинаковое название параметров в функции
+  # например add(a,a)
+  no-dupe-args: 2
+
+  # запрет на одинаковые ключи в объекте
+  no-dupe-keys: 2
+
+  # запрет на одинаковые условия в  switch
+  no-duplicate-case: 2
+
+  # запрет на использование в регулярках пустых скобок []
+  no-empty-character-class: 2
+
+  # запрет на пустой блок
+  no-empty: 2
+
+  # запрет на затирание объекта exception
+  no-ex-assign: 2
+
+  # запрет на использование !!, !!! и тд
+  no-extra-boolean-cast: 2
+
+  # выделять блоки результат которых заранее известен
+  # например:
+  # ((function foo() {}))();
+  # (0).toString();
+  no-extra-parens: 2
+
+  #запрет на два символа ; подряд
+  no-extra-semi: 1
+
+  # запрет на объявление функции в условных блоках
+  no-inner-declarations: 2
+
+  # проверка регулярных выражений
+  no-invalid-regexp: 2
+
+  # проверка оператора in
+  no-negated-in-lhs: 2
+
+  # пркерка попытки обращения к объекту как к функции
+  # Math();
+  no-obj-calls: 2
+
+  # Использование для пробелов в регулярных выражениях  количества
+  # вместо var re = /foo   bar/;
+  # использовать  var re = /foo {3}bar/;
+  no-regex-spaces: 1
+
+  # Запрет на использование конструкции
+  # var items = [,,];
+  no-sparse-arrays: 2
+
+  # Запрет на код после return
+  no-unreachable: 2
+
+  # Использование isNaN вместо foo == NaN
+  use-isnan: 2
+
+  # Валидация JsDock
+  valid-jsdoc: 1
+
+  # Валидация строк справа от  typeof
+  #например typeof foo === "strnig"   /*error Invalid typeof comparison value*/
+  valid-typeof: 2
+
+  #
+  # Best practics
+  #
+
+  # объявление геттеров и сеттеров
+  accessor-pairs:
+    - 2
+    -
+      getWithoutSet: true
+
+  # запрет на использование var внутри логических блоков
+  block-scoped-var: 2
+
+  # максимальная сложность независимых путей
+  complexity:
+    - 2
+    - 5
+
+  # Все return должны чтото возвращать или не возвращать ничего
+  consistent-return: 2
+
+  #логические блоки должны быть со скобками
+  curly: 2
+
+  #Обязательный блок default
+  default-case: 2
+
+  #перенос строк перед точкой
+  dot-location:
+    - 1
+    - 'property'
+
+  # правиало именования полей
+  dot-notation:
+    - 2
+    - allowPattern: "^[a-z]+[A-Za-z]+$"
+
+  #умный запрет на  == (использовать ===)
+  eqeqeq:
+    - 2
+    - smart
+
+  #for in по объектам только с фильтрацией
+  guard-for-in:
+    - 2
+
+  #запрет на alert и confirm
+  no-alert: 2
+
+  #запрет arguments.callee (устаревшее)
+  no-caller: 2
+
+  # запрет на неиспользуемое объявление переменных
+  # блоках case
+  no-case-declarations: 2
+
+  # замена /=foo/; на /\=foo/;
+  no-div-regex: 2
+
+  # не использовать else если происходит выход из функции если
+  # и в if и в else выход
+  no-else-return: 1
+
+  # Матчинг с пустыми объектами и массивами
+  no-empty-pattern: 2
+
+  #сравнение с null должно быть через ===
+  no-eq-null: 2
+
+  # не использовать eval
+  no-eval: 2
+
+  # не расширять стандартные объекты черех прототип
+  no-extend-native: 2
+
+  # запрещен case без break
+  no-fallthrough: 2
+
+  # float вида  .5; 2.; yнельзя объявлять
+  no-floating-decimal: 2
+
+  # запрет eval
+  no-implied-eval: 2
+
+  # Запрещены пустые блоки {}
+  no-lone-blocks: 1
+
+  # запрет на замыкание переменной счетчика в цикле
+  no-loop-func: 2
+
+  # нельзя использовать магические перменные
+  no-magic-number: 0
+
+  # убираем несколько пробелов подряд
+  no-multi-spaces: 1
+
+
+  # Нельзя переопределять стандартные объекты
+  no-native-reassign: 2
+
+  # запрет на синтаксис new Function("a", "b", "return a + b");
+  no-new-func: 2
+
+  #нельзя изменять параметры функции
+  no-param-reassign:
+    - 2
+    - props: true
+
+  # Запрет на получение прототипа через  __proto__
+  no-proto: 2
+
+  # Запрет на переприсваивание переменной
+  no-redeclare: 2
+
+  #Запрет конструкции location.href = "javascript:void(0)";
+  no-script-url: 2
+
+  # Запрет на сравнение с самим собой
+  no-self-compare: 2
+
+  # Запрет на конструкции присваивания с разным
+  # количеством оргументов var a = (3, 5);
+  no-sequences: 2
+
+  # Запрет на использование выражений результат которых никуда не передается
+  no-unused-expressions: 1
+
+  # Exception должен быть типа Error
+  no-throw-literal: 1
+
+  #не используем void
+  no-void: 2
+
+  no-warning-comments:
+    - 2
+    - terms:
+      - hack
+      - fix
+  # Запретить команду with
+  no-with: 2
+
+  # var должны быть вверху
+  vars-on-top: 2
+
+  # В условных выражениях слева стоит перменная, справа константа
+  yoda: 2
+
+  # Обязательна инициализация переменнйо при объявлении
+  init-declarations:
+    - 2
+    - always
+
+  # Не допускаются пустые catch блоки
+  no-catch-shadow: 2
+
+  # не удалять переменные
+  no-delete-var: 2
+
+  # Запрет на переопределение стандартных имен
+  no-shadow-restricted-names: 2
+
+  # Нельзя использова не объвленные функции
+  # и переменные
+  no-undef: 2
+
+  # Нельзя инициализировать переменную значением undefined
+  no-undef-init: 2
+
+  # Поиск неиспользуемых перменных
+  no-unused-vars: 1
+
+  # Переменная используется до ее объявления
+  no-use-before-define: 2
+
+
+
+
+  # =====================
+  # Node.js and CommonJS
+  # =====================
+
+  # Вызов callback должен сопровождатся return
+  callback-return: 1
+
+  # require должны быть в глобальной области видимости
+  global-require: 2
+
+  # Паттерн по которому ошибка должна быть первым парметром
+  handle-callback-err:
+    - 2
+    - "^(err|error)$"
+
+  # Группировка подключаемых библиотек
+  no-mixed-requires:
+    - 1
+    - grouping: true
+
+  # результат require  не должен быть конструктором
+  no-new-require: 2
+
+  # не использовать сложение строк  __dirname  и __filename
+  # использовать path.resolve()
+  no-path-concat: 2
+
+
+  # =====================
+  # Stylistic Issuesmodule.exports =
+  # =====================
+  array-bracket-spacing:
+    - 1
+    - never
+
+  block-spacing:
+    - 1
+    - always
+
+  brace-style:
+    - 1
+
+  camelcase:
+    - 2
+
+  comma-spacing: 1
+
+  comma-style:
+    - 2
+    - last
+  computed-property-spacing:
+    - 2
+    - never
+
+  consistent-this:
+    - 2
+    - self
+
+  eol-last: 1
+
+  func-style:
+    - 1
+    - expression
+
+  id-match:
+    - 2
+    - "^\\$?[A-Za-z_][A-Za-z_0-9]*$"
+    - properties: true
+
+  indent:
+    - 2
+    - 4
+
+  key-spacing:
+    - 1
+
+  max-depth:
+    - 2
+    - 5
+
+  max-len:
+    - 2
+    - 100
+    - 4
+
+  max-nested-callbacks:
+    - 2
+    - 4
+
+  new-cap: 2
+
+  new-parens: 2
+
+  no-array-constructor: 2
+
+  no-lonely-if: 2
+
+  no-mixed-spaces-and-tabs: 2
+
+  no-multiple-empty-lines:
+   - 1
+   -
+     max: 3
+     maxEOF: 1
+
+  no-negated-condition: 2
+
+  no-nested-ternary: 2
+
+  no-spaced-func: 2
+
+  no-trailing-spaces: 1
+
+  no-underscore-dangle: 0
+
+  no-unneeded-ternary: 2
+
+  object-curly-spacing:
+    - 2
+    - never
+
+  quotes:
+    - 2
+    - single
+    - avoid-escape
+
+  #require-jsdoc: [1, { "require":{"FunctionDeclaration": true, "MethodDefinition": true, "ClassDeclaration": true}}]
+
+  semi-spacing: 1
+
+  semi:
+    - 1
+    - always
+
+
+  space-before-blocks:
+    - 1
+    - always
+
+  space-before-function-paren:
+    - 1
+    - always
+
+  no-labels: 2
+
+  keyword-spacing: [2, {"after": true, "before": true}]
+
+  space-in-parens:
+    - 1
+    - never
+
+  space-infix-ops: 1
+
+  space-unary-ops: 1
+
+  # =====================
+  # ECMAScript 6
+  # =====================
+  arrow-body-style:
+    - 2
+    - as-needed
+  arrow-parens:
+    - 2
+    - as-needed
+
+  arrow-spacing:
+    - 1
+
+  constructor-super: 2
+
+  generator-star-spacing:
+    - 1
+
+  no-arrow-condition: 0
+
+  no-class-assign: 2
+
+  no-const-assign: 2
+
+  no-dupe-class-members: 2
+
+  no-this-before-super: 2
+
+  prefer-template: 1
+
+  prefer-const: 2
+
+  no-var: 2
+
+  require-yield: 0
