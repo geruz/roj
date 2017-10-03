@@ -1,9 +1,8 @@
 'use strict';
 
-const react = require('./react');
+const {createModule, defaultWindowFactory} = require('./react');
 
 module.exports = {
-    findIn: function (...directories) {
-        return react(...directories);
-    },
+    createModule,
+    defaultWindowFactory,
 };

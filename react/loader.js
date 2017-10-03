@@ -5,9 +5,14 @@ const path = require('path');
 const fs = require('fs');
 const mod = require('module');
 
+require('./require-proxy');
+// Игнорируем серверный require ассетов
+require('./require-proxy').ignoreExtensions('.scss');
+
 class LoadedComponent {
-    constructor (name, module) {
+    constructor (name, module, json) {
         this.name = name;
+        this.rojJson = json;
         this.module = module;
     }
     render (model) {
@@ -20,7 +25,8 @@ class LoadedComponent {
 /*eslint-disable global-require*/
 class ComponentLoader {
     constructor (dir, subdir) {
-        this.path = path.join(dir, subdir, 'render.jsx');
+        this.dir = dir;
+        this.rojJson = path.join(dir, subdir, 'roj.json');
         this.name = subdir;
     }
     static localRequire (oldPaths) {
@@ -38,19 +44,25 @@ class ComponentLoader {
             presets: ['react'],
             plugins: ['transform-react-jsx',
                 'transform-decorators-legacy',
-                'transform-es2015-modules-commonjs'],
+                'transform-es2015-modules-commonjs',
+                'transform-object-rest-spread',
+                'syntax-object-rest-spread',
+                'transform-class-properties',
+            ],
             extensions: ['.jsx', '.js'],
         });
-        const pack = require(path.join(path.resolve(), this.path));
+        const json = require(this.rojJson);
+
+        const pack = require(path.join(this.dir, this.name, json.server || 'render.jsx'));
         mod._extensions = ext;
         mod.Module._nodeModulePaths = oldPaths;
-        return new LoadedComponent(this.name, pack);
+        return new LoadedComponent(this.name, pack, json);
     }
 }
 
 module.exports = {
     find: dir => fs.readdirSync(dir)
           .map(subdir => new ComponentLoader(dir, subdir))
-          .filter(x => fs.existsSync(x.path)),
+          .filter(x => fs.existsSync(x.rojJson)),
     load: componentData => componentData.load(),
 };
