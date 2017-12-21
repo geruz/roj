@@ -186,12 +186,12 @@ const createElement = function (Cl, props, ...children) {
             case 'checked':
             case 'defaultChecked':
                 if (value) {
-                    attributes += ' checked';
+                    attributes += ' checked=""';
                 }
                 break;
             case 'disabled': 
                 if (value) {
-                    attributes += ' disabled';
+                    attributes += ' disabled=""';
                 }
                 break;
             default:

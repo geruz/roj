@@ -12,9 +12,9 @@ const Statistics  = ({count = 100}) => <div a="2">
     <input value={null}/>
     <input value={undefined}/>
     <input value={1}/>
-    <BB />
-    <BB />
-    <BB />
+    <input type='checkbox' checked />
+    <input type='checkbox' checked={true} />
+    <input value={1} disabled/>
     <BB />
     <span>2</span>
     <span className="3">{"3"}</span>
