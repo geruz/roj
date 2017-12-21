@@ -51,7 +51,6 @@ const proxy = function dependencyProxy (_module, id, next) {
             }
         }
     }
-
     return next(_module, id);
 };
 

@@ -1,6 +1,6 @@
 'use strict';
 
-const components = require('../../middlewares').findIn('./components');
+const components = require('../../middlewares').findIn('components');
 
 const express = require('express');
 const app = express();

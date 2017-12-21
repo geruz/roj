@@ -4,21 +4,56 @@
 const path = require('path');
 const fs = require('fs');
 const mod = require('module');
-
+const {renderToString} = require('react-dom/server')
 require('./require-proxy');
 // Игнорируем серверный require ассетов
 require('./require-proxy').ignoreExtensions('.scss');
+class Context {
+    constructor () {
+        this.isRoot = true;
+        this.emptyNumber = 0;
+        this.output = [];
+        this.write = this.write.bind(this);
+    }
+    write (str) {
+        this.output.push(str);
+    }
+    build () {
+        return this.output.join('');
+    }
+}
 
-class LoadedComponent {
-    constructor (name, module, json) {
+
+class LoadedReactComponent {
+    constructor (name, func, json) {
         this.name = name;
         this.rojJson = json;
-        this.module = module;
+        this.func = func;
     }
     render (model) {
         const el = {};
-        this.module(model, el);
-        return el.src;
+        const res = this.func(model, el);
+        return renderToString(res);
+    }
+}
+class LoadedRojComponent {
+    constructor (name, func, json) {
+        this.name = name;
+        this.rojJson = json;
+        this.func = func;
+    }
+    render (model) {
+        const el = {};
+        const res = this.func(model, el);
+        if (res) {
+            const context = new Context();
+            res.toHtmlString(context);
+            return context.build('');
+        }
+        if (el.src !== undefined) {
+            return el.src;
+        }
+        return res;
     }
 }
 
@@ -36,9 +71,12 @@ class ComponentLoader {
             return paths;
         };
     }
-    load () {
+    load ({engine = 'roj'} = {}) {
+        mod.Module._cache = {};
         const oldPaths = mod.Module._nodeModulePaths;
-        mod.Module._nodeModulePaths = ComponentLoader.localRequire(oldPaths);
+        if (engine === 'roj') {
+            mod.Module._nodeModulePaths = ComponentLoader.localRequire(oldPaths);
+        }
         const ext = mod._extensions;
         require('babel-core/register')({
             presets: ['react'],
@@ -53,16 +91,19 @@ class ComponentLoader {
         });
         const json = require(this.rojJson);
 
-        const pack = require(path.join(this.dir, this.name, json.server || 'render.jsx'));
+        const file = require(path.join(this.dir, this.name, json.server || 'render.jsx'));
         mod._extensions = ext;
         mod.Module._nodeModulePaths = oldPaths;
-        return new LoadedComponent(this.name, pack, json);
+        if (engine === 'roj') {
+            return new LoadedRojComponent(this.name, file, json);
+        }
+        return new LoadedReactComponent(this.name, file, json);
     }
 }
 
 module.exports = {
-    find: dir => fs.readdirSync(dir)
+    findIn: dir => fs.readdirSync(dir)
           .map(subdir => new ComponentLoader(dir, subdir))
           .filter(x => fs.existsSync(x.rojJson)),
-    load: componentData => componentData.load(),
+    load: (componentData, param) => componentData.load(param),
 };
