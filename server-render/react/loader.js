@@ -4,7 +4,7 @@
 const path = require('path');
 const fs = require('fs');
 const mod = require('module');
-const {renderToString} = require('react-dom/server')
+const {renderToString} = require('react-dom/server');
 require('./require-proxy');
 // Игнорируем серверный require ассетов
 require('./require-proxy').ignoreExtensions('.scss');
@@ -19,6 +19,13 @@ class Context {
         this.output.push(str);
     }
     build () {
+        const first = this.output[0];
+        if (/<[a-z]+$/.test(first)) {
+            return first + this.output[1] + ' data-reactroot=""' + this.output.slice(2).join('');
+        } 
+        if (/<[a-z]+>/.test(first)) {
+            return first.substring(0, first.length - 2) + ' data-reactroot="">' + this.output.slice(1).join('');
+        }
         return this.output.join('');
     }
 }
