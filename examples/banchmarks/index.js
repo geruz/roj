@@ -12,8 +12,11 @@ const tests = components => Object.keys(components)
 // add tests
 const rojStr = rojComponents['array'].render({count: 1});
 const reactStr = reactComponents['array'].render({count: 1});
+
 if (rojStr !== reactStr) {
-  console.log(rojStr, '\n\n', reactStr);
+    console.log('roj:\n', rojStr);
+    console.log('\n\n');
+    console.log('react:\n', reactStr);
 }
 suite.add('React Render', () => {
   tests(reactComponents).forEach(t => t());

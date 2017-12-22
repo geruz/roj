@@ -17,30 +17,38 @@ const renderElement = function (el, context) {
     if (el === true || el === false || el === null || el === undefined || el === '') {
         return;
     }
-    if (el instanceof Array) {
-        for(let i = 0; i < el.length; i++) {
-            const e = el[i]
-            if (typeof e === 'string' &&  spaces.test(e)) {
-                if (el[i - 1]) {
-                    context.write(`<!-- -->`)
-                }
-                context.write(e)
-                if (el[i + 1]) {
-                    context.write(`<!-- -->`)
-                }
-                continue;
+    const output = context.output
+    switch (typeof el){
+        case 'number':
+            output.push(el.toString());
+            return
+        case 'string':
+            output.push(escape(el));
+            return
+        case 'object':
+            if (el.hasOwnProperty('toHtmlString') ||el instanceof Component ) {
+                el.toHtmlString(context);
+                return;
             }
-            renderElement(e, context)
-        }
-        return;
+            if (el instanceof Array) {
+                for(let i = 0; i < el.length; i++) {
+                    const e = el[i]
+                    if (typeof e === 'string' &&  spaces.test(e)) {
+                        if (i > 0 && output[output.length -1] != '<!-- -->') {
+                            output.push(`<!-- -->`)
+                        }
+                        output.push(e)
+                        if (el[i + 1]) {
+                            output.push(`<!-- -->`)
+                        }
+                        continue;
+                    }
+                    renderElement(e, context)
+                }
+            }
+            return;
     }
-    if (el && el.toHtmlString) {
-        el.toHtmlString(context);
-        return;
-    }
-    return context.write(escape(el));
 }
-
 
 class Component {
     constructor (props) {
