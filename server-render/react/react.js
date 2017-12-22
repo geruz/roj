@@ -124,7 +124,7 @@ const createElement = function (Cl, props, ...children) {
 
         try {
             if (Cl.prototype) {
-                const inst = new Cl(props)
+                const inst = new Cl(props);
                 if (inst && inst.componentWillMount) {
                     inst.componentWillMount();
                 }
@@ -168,8 +168,11 @@ const createElement = function (Cl, props, ...children) {
                  attributes += ' class="' + value + '"';
                  break;
             case 'style':
-                const style = Object.keys(value).map(function(x) {`${hyphenateStyleName(x)}:${value[x]}`}).join(';');
-                attributes += ' style="' + style + '"';
+                const style = []
+                for (const x of Object.keys(value)){
+                    style.push(`${hyphenateStyleName(x)}:${value[x]}`)
+                }
+                attributes += ' style="' + style.join(';') + '"';
                 break;
             case 'defaultValue':
             case 'value':
