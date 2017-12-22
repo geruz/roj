@@ -8,6 +8,7 @@ class BB extends Component {
         return  <h1 width='20px'>11</h1>;
     }
 } 
+const html="<a href='aaa'>aa</a>"
 const Statistics  = ({count = 100}) => <div a="2">
     <input value={null}/>
     <input value={undefined}/>
@@ -39,5 +40,6 @@ const Statistics  = ({count = 100}) => <div a="2">
     <span className="3"> {3}    {true} </span>
     <span className="3"> {3}    {true}  {2} </span>
     <span className="3"> {3}    {true}  {false}   {2}  </span>
+    <span dangerouslySetInnerHTML= {{__html: html}} />
 </div>
 module.exports = init => <Statistics count={init.count}/>;
