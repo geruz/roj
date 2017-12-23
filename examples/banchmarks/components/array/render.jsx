@@ -10,6 +10,7 @@ class BB extends Component {
 } 
 const html="<a href='aaa'>aa</a>"
 const Statistics  = ({count = 100}) => <div a="2">
+    <h1 width='20'>11</h1>
     <input value={null}/>
     <input value={undefined}/>
     <input value={1}/>
@@ -43,6 +44,8 @@ const Statistics  = ({count = 100}) => <div a="2">
     <span dangerouslySetInnerHTML= {{__html: html}} />
     <textarea value= {html} />
     <textarea defaultValue= {html} />
+    
+    
     
 </div>
 module.exports = init => <Statistics count={init.count}/>;

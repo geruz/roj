@@ -12,8 +12,6 @@ require('./require-proxy');
 require('./require-proxy').ignoreExtensions('.scss');
 class Context {
     constructor () {
-        this.isRoot = true;
-        this.emptyNumber = 0;
         this.output = [];
         this.write = this.write.bind(this);
     }
