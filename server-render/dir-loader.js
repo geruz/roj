@@ -24,21 +24,21 @@ const createRenderFunction = component => {
         enableClient: rojJson.enableClient,
         id: component.name,
         rootTag: rojJson.rojJson || 'div',
-    }
+    };
     return (data, params = {}) => {
         const p = Object.assign({}, params, defConfig);
         const client = p.enableClient ? getForClient(data, p) : '';
         const server = p.enableServer ? getForServer(data, p) : '';
         return `${server}${client}`;
     };
-}
+};
 const existDir = dir => {
     if (!fs.existsSync(dir)) {
         console.warn(`Roj ignore: directory ${dir} not exist`);
         return false;
     }
     return true;
-} 
+};
 
 const loadFrom = params => function (...directories) {
     const allComponents = [].concat(...directories.filter(existDir).map(loader.findIn));

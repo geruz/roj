@@ -22,7 +22,7 @@ class Context {
         const first = this.output[0];
         if (/<[a-z]+$/.test(first)) {
             return first + this.output[1] + ' data-reactroot=""' + this.output.slice(2).join('');
-        } 
+        }
         if (/<[a-z]+>/.test(first)) {
             return first.substring(0, first.length - 2) + ' data-reactroot="">' + this.output.slice(1).join('');
         }
