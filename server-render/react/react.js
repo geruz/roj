@@ -82,8 +82,21 @@ class Tag {
         
         if (children.length === 0) {
             switch (tag){
+                case 'area':
+                case 'base':
+                case 'br':
+                case 'col':
+                case 'embed':
+                case 'hr':
+                case 'img':
                 case 'input':
-                case 'img': 
+                case 'keygen':
+                case 'link':
+                case 'meta':
+                case 'param':
+                case 'source':
+                case 'track':
+                case 'wbr':
                 output.push(`<${tag}${attributes}/>`)
                 return;
             }
