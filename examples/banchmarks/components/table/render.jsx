@@ -6,7 +6,7 @@ import React, {Component} from 'react';
 const Table  = () => <table>
   <thead>
     <tr>
-      <th rowSpan="2">Name</th>
+      <th rowSpan="2" htmlFor='aa'>Name</th>
       <th rowspan="2">ID</th>
       <th colspan="2">Membership Dates</th>
       <th rowspan="2">Balance</th>

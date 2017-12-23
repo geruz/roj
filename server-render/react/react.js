@@ -4,9 +4,8 @@
 const escape = require('./escape');
 //const escape = require('escape-html');
 const style = require('./style');
-
+const attrs = require('./attrs');
 const log = console.log;
-
 const pr = new Proxy({}, {
     get: (target, name) => {
         return pr;
@@ -226,7 +225,8 @@ const createElement = function (Cl, props, ...children) {
                 }
                 break;
             default:
-                attributes += ' ' + attr + '="' + escape(value.toString()) + '"';
+                
+                attributes += ' ' + (attrs[attr] || attr) + '="' + escape(value.toString()) + '"';
                 break;
         }
     }
