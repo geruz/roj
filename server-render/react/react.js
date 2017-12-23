@@ -12,7 +12,7 @@ const pr = new Proxy({}, {
         return pr;
     },
 });
-
+const toHtmlString = Symbol.for('toHtmlString');
 const spaces = /[ ]+/;
 const renderElement = function (el, context) {
     if (el === true || el === false || el === null || el === undefined || el === '') {
@@ -26,8 +26,8 @@ const renderElement = function (el, context) {
             context.output.push(escape(el));
             return
         case 'object':
-            if (el.hasOwnProperty('toHtmlString') ||el instanceof Component ) {
-                el.toHtmlString(context);
+            if (el.hasOwnProperty(toHtmlString) || el instanceof Component ) {
+                el[toHtmlString](context);
                 return;
             }
             const output = context.output
@@ -56,7 +56,7 @@ class Component {
         this.props = props;
         this.refs = pr;
     }
-    toHtmlString (context) {
+    [toHtmlString] (context) {
         try {
             const element = this.render();
             renderElement(element, context);
@@ -66,7 +66,7 @@ class Component {
         }
     }
     setState (st) {
-        this.state = st;
+        this.state = Object.assign(this.state, st);
     }
     forceUpdate () {}
 };
@@ -74,7 +74,7 @@ const createTag = function (tag, attributes, children) {
     const attr = {str: attributes};
     return {
         attributes: attr,
-        toHtmlString: function (context) {
+        [toHtmlString]: function (context) {
             const output = context.output
             if (children.length == 0) {
                 switch (tag){
@@ -95,7 +95,7 @@ const createTag = function (tag, attributes, children) {
 };
 const createEmptyTag = function (tag, children) {
     return {
-        toHtmlString: function (context) {
+        [toHtmlString]: function (context) {
             const output = context.output;
             if (children.length == 0) {
                 output.push(`<${tag}/>`)
@@ -143,7 +143,7 @@ const createElement = function (Cl, props, ...children) {
     if (props.dangerouslySetInnerHTML) {
         const html = props.dangerouslySetInnerHTML.__html || '';
         children.unshift({
-            toHtmlString: function (context) {
+            [toHtmlString]: function (context) {
                 context.write(html);
             },
         });
@@ -227,3 +227,4 @@ module.exports.createElement = createElement;
 module.exports.Component = Component;
 module.exports.PureComponent = Component;
 module.exports.React = class React {};
+module.exports.toHtmlString = toHtmlString;

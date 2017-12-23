@@ -5,6 +5,8 @@ const path = require('path');
 const fs = require('fs');
 const mod = require('module');
 const {renderToString} = require('react-dom/server');
+
+const toHtmlString = Symbol.for('toHtmlString');
 require('./require-proxy');
 // Игнорируем серверный require ассетов
 require('./require-proxy').ignoreExtensions('.scss');
@@ -54,7 +56,7 @@ class LoadedRojComponent {
         const res = this.func(model, el);
         if (res) {
             const context = new Context();
-            res.toHtmlString(context);
+            res[toHtmlString](context);
             return context.build('');
         }
         if (el.src !== undefined) {
