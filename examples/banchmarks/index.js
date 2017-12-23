@@ -13,13 +13,22 @@ const tests = components => Object.keys(components)
 const rojStr = rojComponents['array'].render({count: 1});
 const reactStr = reactComponents['array'].render({count: 1});
 
+
 if (rojStr !== reactStr) {
-    console.log('roj:\n', rojStr);
-    console.log('\n\n');
-    console.log('react:\n', reactStr);
+    for (let a = 0; a < rojStr.length; a += 50) {
+        if (rojStr.substring(a, a + 50) !== reactStr.substring(a, a + 50)) {
+            console.log('roj:\n', rojStr.substring(a - 20, a + 50));
+            console.log('\n\n');
+            console.log('react:\n', reactStr.substring(a - 20, a + 50));
+            break;
+        }
+    }
 }
+const matchHtmlRegExp = /['"<>&]/;
+
+
 suite.add('React Render', () => {
-  tests(reactComponents).forEach(t => t());
+    tests(reactComponents).forEach(t => t());
 })
 .add('Roj Render', () => {
     tests(rojComponents).forEach(t => t());

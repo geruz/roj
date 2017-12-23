@@ -1,7 +1,8 @@
 'use strict';
 
 /*eslint-disable */
-const escape = require('escape-html');
+const escape = require('./escape');
+//const escape = require('escape-html');
 const style = require('./style');
 
 const log = console.log;
@@ -17,19 +18,19 @@ const renderElement = function (el, context) {
     if (el === true || el === false || el === null || el === undefined || el === '') {
         return;
     }
-    const output = context.output
     switch (typeof el){
         case 'number':
-            output.push(el.toString());
+            context.output.push(el.toString());
             return
         case 'string':
-            output.push(escape(el));
+            context.output.push(escape(el));
             return
         case 'object':
             if (el.hasOwnProperty('toHtmlString') ||el instanceof Component ) {
                 el.toHtmlString(context);
                 return;
             }
+            const output = context.output
             if (el instanceof Array) {
                 for(let i = 0; i < el.length; i++) {
                     const e = el[i]
@@ -186,6 +187,10 @@ const createElement = function (Cl, props, ...children) {
                             ch.attributes.str = ' selected=""'+ attrStr;
                         }
                     }
+                    break;
+                }
+                if (Cl === 'textarea'){
+                    children.unshift(escape(value));
                     break;
                 }
                 if (value === null || value === undefined) {

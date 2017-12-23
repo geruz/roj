@@ -16,7 +16,6 @@
     "babel-plugin-transform-react-jsx": "^6.8.0",
     "babel-preset-react": "^6.16.0",
     "babel-runtime": "^6.26.0",
-    "escape-html": "^1.0.3",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
   },
