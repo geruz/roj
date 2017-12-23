@@ -15,40 +15,40 @@ const pr = new Proxy({}, {
 const toHtmlString = Symbol.for('toHtmlString');
 const spaces = /[ ]+/;
 const renderElement = function (el, context) {
+
+    if (el instanceof Object) {
+        if (el[toHtmlString]) {
+            el[toHtmlString](context);
+            return;
+        }
+        const output = context.output
+        if (el instanceof Array) {
+            for(let i = 0; i < el.length; i++) {
+                const e = el[i]
+                if (typeof e === 'string' &&  spaces.test(e)) {
+                    if (i > 0 && output[output.length -1] != '<!-- -->') {
+                        output.push(`<!-- -->`)
+                    }
+                    output.push(e)
+                    if (el[i + 1]) {
+                        output.push(`<!-- -->`)
+                    }
+                    continue;
+                }
+                renderElement(e, context)
+            }
+        }
+        return;
+    }
+
     if (el === true || el === false || el === null || el === undefined || el === '') {
         return;
     }
-    switch (typeof el){
-        case 'number':
-            context.output.push(el.toString());
-            return
-        case 'string':
-            context.output.push(escape(el));
-            return
-        case 'object':
-            if (el.hasOwnProperty(toHtmlString) || el instanceof Component ) {
-                el[toHtmlString](context);
-                return;
-            }
-            const output = context.output
-            if (el instanceof Array) {
-                for(let i = 0; i < el.length; i++) {
-                    const e = el[i]
-                    if (typeof e === 'string' &&  spaces.test(e)) {
-                        if (i > 0 && output[output.length -1] != '<!-- -->') {
-                            output.push(`<!-- -->`)
-                        }
-                        output.push(e)
-                        if (el[i + 1]) {
-                            output.push(`<!-- -->`)
-                        }
-                        continue;
-                    }
-                    renderElement(e, context)
-                }
-            }
-            return;
+    if (typeof el === 'string'){
+        context.output.push(escape(el));
+        return
     }
+    context.output.push(el.toString());
 }
 
 class Component {
@@ -70,44 +70,46 @@ class Component {
     }
     forceUpdate () {}
 };
-const createTag = function (tag, attributes, children) {
-    const attr = {str: attributes};
-    return {
-        attributes: attr,
-        [toHtmlString]: function (context) {
-            const output = context.output
-            if (children.length == 0) {
-                switch (tag){
-                    case 'input':
-                    case 'img': 
-                    output.push(`<${tag}${attr.str}/>`)
-                    return;
-                }
+class Tag {
+    constructor(tag, attributes, children){
+        this.tag = tag;
+        this.attributes = attributes;
+        this.children = children;
+    }
+    [toHtmlString](context) {
+        const output = context.output;
+        const {tag, children, attributes} = this;
+        
+        if (children.length === 0) {
+            switch (tag){
+                case 'input':
+                case 'img': 
+                output.push(`<${tag}${attributes}/>`)
+                return;
             }
-            output.push(`<${tag}`)
-            output.push(attr.str);
-            output.push('>');
+        }
+        output.push(`<${tag}`, attributes, '>')
+        renderElement(children, context);
+        output.push(`</${tag}>`);
+    }
+}
+class EmptyTag {
+    constructor(tag, children) {
+        this.children = children;
+        this.tag = tag;
+    }
+    [toHtmlString](context) {
+        const output = context.output;
+        const {tag, children} = this;
+        if (children.length === 0) {
+            output.push(`<${tag}/>`)
+        }else{
+            output.push(`<${tag}>`)
             renderElement(children, context);
             output.push(`</${tag}>`);
-            
-        },
-    };
-};
-const createEmptyTag = function (tag, children) {
-    return {
-        [toHtmlString]: function (context) {
-            const output = context.output;
-            if (children.length == 0) {
-                output.push(`<${tag}/>`)
-            }else{
-                const output = context.output
-                output.push(`<${tag}>`)
-                renderElement(children, context);
-                output.push(`</${tag}>`);
-            }
-        },
-    };
-};
+        }
+    }
+}
 
 const createElement = function (Cl, props, ...children) {
     
@@ -138,7 +140,7 @@ const createElement = function (Cl, props, ...children) {
         }
     }
     if (props === null) {
-        return createEmptyTag(Cl, children);
+        return new EmptyTag(Cl, children);
     }
     if (props.dangerouslySetInnerHTML) {
         const html = props.dangerouslySetInnerHTML.__html || '';
@@ -182,9 +184,9 @@ const createElement = function (Cl, props, ...children) {
                         if (!ch.attributes) {
                             break;
                         }
-                        const attrStr = ch.attributes.str
+                        const attrStr = ch.attributes
                         if (attrStr.indexOf(`value="${value}"`) >=0) {
-                            ch.attributes.str = ' selected=""'+ attrStr;
+                            ch.attributes = ' selected=""'+ attrStr;
                         }
                     }
                     break;
@@ -216,9 +218,9 @@ const createElement = function (Cl, props, ...children) {
         }
     }
     if (attributes === '') {
-        return createEmptyTag(Cl, children);
+        return new EmptyTag(Cl, children);
     }
-    return createTag(Cl, attributes, children);
+    return new Tag(Cl, attributes, children);
 };
     
 
@@ -227,4 +229,3 @@ module.exports.createElement = createElement;
 module.exports.Component = Component;
 module.exports.PureComponent = Component;
 module.exports.React = class React {};
-module.exports.toHtmlString = toHtmlString;
