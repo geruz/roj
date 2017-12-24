@@ -6,27 +6,51 @@ const rojComponents = loadRoj(`${__dirname}/components`);
 const reactComponents = loadReact(`${__dirname}/components`);
 const Benchmark = require('benchmark');
 const suite = new Benchmark.Suite();
+const colors = require('colors/safe');
 
-const tests = components => Object.keys(components)
-  .map(key => () => components[key].render({count: 1000}));
-// add tests
-const rojStr = rojComponents['array'].render({count: 1});
-const reactStr = reactComponents['array'].render({count: 1});
-
-
-if (rojStr !== reactStr) {
-    for (let a = 0; a < rojStr.length; a += 50) {
-        if (rojStr.substring(a, a + 50) !== reactStr.substring(a, a + 50)) {
-            console.log('roj:\n', rojStr.substring(a - 20, a + 50));
-            console.log('\n\n');
-            console.log('react:\n', reactStr.substring(a - 20, a + 50));
+const printName = name => {
+    const l = 50;
+    const spaces = (l - name.length - 4) / 2;
+    console.log('*'.repeat(l));
+    console.log(
+        '*'.repeat(2)
+        + ' '.repeat(Math.floor(spaces))
+        + colors.green(name)
+        + ' '.repeat(Math.ceil(spaces))
+        + '*'.repeat(2));
+    console.log('*'.repeat(l));
+};
+const printDelta = (rojStr, reactStr) => {
+    let equalPart = '';
+    let i = 0;
+    for (; i < rojStr.length; i++) {
+        if (rojStr[i] === reactStr[i]) {
+            equalPart += rojStr[i];
+        } else {
             break;
         }
     }
+    console.log(colors.green('roj:  '), equalPart + colors.red(rojStr.substring(i)));
+    console.log(colors.green('react:'), equalPart + colors.red(reactStr.substring(i)));
 }
-const matchHtmlRegExp = /['"<>&]/;
+
+const equalRender = name => {
+    const rojStr = rojComponents[name].render();
+    const reactStr = reactComponents[name].render();
+    if (rojStr !== reactStr) {
+        for (let a = 0; a < rojStr.length; a += 50) {
+            if (rojStr.substring(a, a + 50) !== reactStr.substring(a, a + 50)) {
+                printName(name)
+                printDelta(rojStr.substring(a - 20, a + 50), reactStr.substring(a - 20, a + 50))
+                return;
+            }
+        }
+    }
+}
+Object.keys(reactComponents).forEach(name => equalRender(name));
 
 
+const tests = components => Object.keys(components).map(key => () => components[key].render());
 suite.add('React Render', () => {
     tests(reactComponents).forEach(t => t());
 })

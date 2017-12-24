@@ -48,4 +48,4 @@ const Statistics  = ({count = 100}) => <div a="2">
     
     
 </div>
-module.exports = init => <Statistics count={init.count}/>;
+module.exports = () => <Statistics />;
