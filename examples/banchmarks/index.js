@@ -10,8 +10,8 @@ const suite = new Benchmark.Suite();
 const tests = components => Object.keys(components)
   .map(key => () => components[key].render({count: 1000}));
 // add tests
-const rojStr = rojComponents['radio'].render({count: 1});
-const reactStr = reactComponents['radio'].render({count: 1});
+const rojStr = rojComponents['array'].render({count: 1});
+const reactStr = reactComponents['array'].render({count: 1});
 
 
 if (rojStr !== reactStr) {

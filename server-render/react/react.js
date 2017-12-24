@@ -12,7 +12,7 @@ const pr = new Proxy({}, {
     },
 });
 const toHtmlString = Symbol.for('toHtmlString');
-const spaces = /[ ]+/;
+const spaces = /^[ ]+$/;
 const renderElement = function (el, context) {
 
     if (el instanceof Object) {
@@ -204,7 +204,7 @@ const createElement = function (Cl, props, ...children) {
                     break;
                 }
                 if (Cl === 'textarea'){
-                    children.unshift(escape(value));
+                    children.unshift(value);
                     break;
                 }
                 if (value === null || value === undefined) {
@@ -225,7 +225,6 @@ const createElement = function (Cl, props, ...children) {
                 }
                 break;
             default:
-                
                 attributes += ' ' + (attrs[attr] || attr) + '="' + escape(value.toString()) + '"';
                 break;
         }
