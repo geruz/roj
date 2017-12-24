@@ -1,0 +1,6 @@
+{
+    "server": "render.jsx",
+    "client": "render.jsx",
+    "enableServer": true,
+    "enableClient": false
+}

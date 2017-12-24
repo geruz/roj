@@ -20,7 +20,7 @@ class Context {
     }
     build () {
         const first = this.output[0];
-        if (/<[a-z]+$/.test(first)) {
+        if (/<[a-z0-9]+$/.test(first)) {
             return first + this.output[1] + ' data-reactroot=""' + this.output.slice(2).join('');
         }
         if (/<[a-z]+>/.test(first)) {
@@ -90,8 +90,6 @@ class ComponentLoader {
             plugins: ['transform-react-jsx',
                 'transform-decorators-legacy',
                 'transform-es2015-modules-commonjs',
-                'transform-object-rest-spread',
-                'syntax-object-rest-spread',
                 'transform-class-properties',
             ],
             extensions: ['.jsx', '.js'],
