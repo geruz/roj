@@ -91,6 +91,7 @@ class ComponentLoader {
                 'transform-decorators-legacy',
                 'transform-es2015-modules-commonjs',
                 'transform-class-properties',
+                'transform-object-rest-spread',
             ],
             extensions: ['.jsx', '.js'],
         });

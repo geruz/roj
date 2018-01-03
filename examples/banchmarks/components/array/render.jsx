@@ -7,7 +7,12 @@ class BB extends Component {
     render(){
         return  <h1 width='20px'>11</h1>;
     }
-} 
+}
+class ChildTest extends Component {
+    render(){
+        return  <div>{this.props.children}</div>;
+    }
+}
 const html="<a href='aaa'>aa</a>"
 const Statistics  = ({count = 100}) => <div a="2">
     <h1 width='20'>11</h1>
@@ -45,7 +50,7 @@ const Statistics  = ({count = 100}) => <div a="2">
     <textarea value= {html} />
     <textarea defaultValue= {html} />
     
-    
+    <ChildTest children={<div>111</div>}>222</ChildTest>
     
 </div>
 module.exports = () => <Statistics />;
