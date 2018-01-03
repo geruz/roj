@@ -1,7 +1,7 @@
 'use strict';
 
-const {createModule, defaultWindowFactory} = require('./middlewares');
+const {rojModule, defaultWindowFactory} = require('./middlewares');
 module.exports = {
-    module: createModule,
+    module: rojModule,
     defaultWindowFactory,
 };

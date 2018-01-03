@@ -3,7 +3,7 @@
 const loader = require('./react/loader');
 const fs = require('fs');
 
-const createRenderFunction = component => {
+const createRenderFunction = (moduleName, component) => {
     const {rojJson} = component;
     const getForServer = (model, {id, rootTag, wrapServer}) => {
         const html = component.render(model);
@@ -13,7 +13,7 @@ const createRenderFunction = component => {
     };
     const getForClient = (model, {id, wrapClient}) => {
         const json = JSON.stringify(model);
-        const client = `window['${module}']['${component.name}'](${json},
+        const client = `window['${moduleName}']['${component.name}'](${json},
             document.getElementById('${id}'))`;
         return wrapClient
             ? wrapClient(client)
@@ -46,7 +46,7 @@ const loadFrom = params => function (...directories) {
         .map(c => ({
             name: c.name,
             model: c.model,
-            render: createRenderFunction(c),
+            render: createRenderFunction(params.module, c),
         }))
         .reduce((s, comp) => Object.assign(s, {[comp.name]: comp}), {});
 };

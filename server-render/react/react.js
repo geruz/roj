@@ -3,7 +3,7 @@
 /*eslint-disable */
 const escape = require('./escape');
 //const escape = require('escape-html');
-const style = require('./style');
+const renderStyle = require('./style');
 const attrs = require('./attrs');
 const log = console.log;
 const pr = new Proxy({}, {
@@ -124,7 +124,6 @@ class EmptyTag {
 }
 
 const createElement = function (Cl, props, ...children) {
-    
     if (Cl instanceof Function) {
 
         if (Cl.defaultProps) {
@@ -135,8 +134,9 @@ const createElement = function (Cl, props, ...children) {
             }
         }
         props = props || {};
-        props.children = children.length === 1 ? children[0] : children;
-
+        if (!props.children) {
+            props.children = children.length === 1 ? children[0] : children;
+        }
         try {
             if (Cl.prototype) {
                 const inst = new Cl(props);
@@ -185,7 +185,8 @@ const createElement = function (Cl, props, ...children) {
             case 'style':
                 const style = []
                 for (const x of Object.keys(value)){
-                    style.push(`${hyphenateStyleName(x)}:${value[x]}`)
+                    if (value[x] != null && value[x] != undefined)
+                        style.push(`${renderStyle(x)}:${value[x]}`)
                 }
                 attributes += ' style="' + style.join(';') + '"';
                 break;
