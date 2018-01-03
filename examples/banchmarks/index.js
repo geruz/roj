@@ -1,7 +1,7 @@
 'use strict';
 
-const loadReact = require('../../server-render/dir-loader')({engine: 'react'});
-const loadRoj = require('../../server-render/dir-loader')({engine: 'roj'});
+const loadReact = require('../../server-render/dir-loader')({engine: 'react', clearCache: true});
+const loadRoj = require('../../server-render/dir-loader')({engine: 'roj', clearCache: true});
 const rojComponents = loadRoj(`${__dirname}/components`);
 const reactComponents = loadReact(`${__dirname}/components`);
 const Benchmark = require('benchmark');

@@ -78,8 +78,11 @@ class ComponentLoader {
             return paths;
         };
     }
-    load ({engine = 'roj'} = {}) {
-        mod.Module._cache = {};
+    load ({engine = 'roj', clearCache = false} = {}) {
+        const cache = mod.Module._cache;
+        if (clearCache){
+            mod.Module._cache = {};
+        }
         const oldPaths = mod.Module._nodeModulePaths;
         if (engine === 'roj') {
             mod.Module._nodeModulePaths = ComponentLoader.localRequire(oldPaths);
@@ -100,6 +103,8 @@ class ComponentLoader {
         const file = require(path.join(this.dir, this.name, json.server || 'render.jsx'));
         mod._extensions = ext;
         mod.Module._nodeModulePaths = oldPaths;
+        mod.Module._cache = cache;
+
         if (engine === 'roj') {
             return new LoadedRojComponent(this.name, file, json);
         }
