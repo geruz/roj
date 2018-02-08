@@ -5,11 +5,12 @@ const fs = require('fs');
 
 const createRenderFunction = (moduleName, component) => {
     const {rojJson} = component;
+    const wrapInTag = (html, {id, rootTag}) => `<${rootTag} id='${id}'>${html}</${rootTag}>`;
     const getForServer = (model, {id, rootTag, wrapServer}) => {
         const html = component.render(model);
         return wrapServer
             ? wrapServer(html)
-            : `<${rootTag} id='${id}'>${html}</${rootTag}>`;
+            : wrapInTag(html, {id, rootTag});
     };
     const getForClient = (model, {id, wrapClient}) => {
         const json = JSON.stringify(model);
@@ -28,7 +29,7 @@ const createRenderFunction = (moduleName, component) => {
     return (data, params = {}) => {
         const p = Object.assign({}, params, defConfig);
         const client = p.enableClient ? getForClient(data, p) : '';
-        const server = p.enableServer ? getForServer(data, p) : '';
+        const server = p.enableServer ? getForServer(data, p) : p.enableClient ? wrapInTag('', p) : '' ;
         return `${server}${client}`;
     };
 };
