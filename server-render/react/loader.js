@@ -7,9 +7,15 @@ const mod = require('module');
 const {renderToString} = require('react-dom/server');
 
 const toHtmlString = Symbol.for('toHtmlString');
-require('./require-proxy');
+const {ignoreExtensions, watchDependencies} = require('./require-proxy');
+
 // Игнорируем серверный require ассетов
-require('./require-proxy').ignoreExtensions('.scss');
+ignoreExtensions('.scss', '.css');
+
+if (process.env.NODE_ENV !== 'production') {
+    watchDependencies(__filename);
+}
+
 class Context {
     constructor () {
         this.output = [];
