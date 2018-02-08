@@ -4,13 +4,19 @@ const loader = require('../server-render/dir-loader');
 
 /*eslint-disable no-param-reassign */
 let defWindowFactory = (req, res) => ({});
-
 const defaultWindowFactory = f => {
     defWindowFactory = f;
 };
+let engine = 'react';
+const setEngine = e => {
+    if (e !== 'react' && e !== 'roj') {
+        throw new Error(`not a valid engine: ${e}. Please select from 'roj' or 'react' `)
+    }
+    engine = e;
+};
 
-const rojModule = (name, windowFactory = defWindowFactory) => {
-    const rojComponents = loader({engine: 'roj', module: name});
+const rojModule = (name, {windowFactory = defWindowFactory} = {}) => {
+    const rojComponents = loader({engine, module: name});
     return (...directories) => {
         const hash = rojComponents(...directories);
         const create = function (req, res) {
@@ -45,4 +51,5 @@ const rojModule = (name, windowFactory = defWindowFactory) => {
 module.exports = {
     rojModule,
     defaultWindowFactory,
+    setEngine,
 };
