@@ -106,7 +106,7 @@ class ComponentLoader {
         });
         const json = require(this.rojJson);
 
-        const file = require(path.join(this.dir, this.name, json.server || 'render.jsx'));
+        const file = require(path.join(this.dir, this.name, json.server || 'render.jsx')).default;
         mod._extensions = ext;
         mod.Module._nodeModulePaths = oldPaths;
         mod.Module._cache = cache;

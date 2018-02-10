@@ -14,7 +14,7 @@ const createRenderFunction = (moduleName, component) => {
     };
     const getForClient = (model, {id, wrapClient}) => {
         const json = JSON.stringify(model);
-        const client = `window['${moduleName}']['${component.name}'](${json},
+        const client = `window['${moduleName}'].default['${component.name}'](${json},
             document.getElementById('${id}'))`;
         return wrapClient
             ? wrapClient(client)
