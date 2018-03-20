@@ -1,6 +1,6 @@
 {
   "name": "roj",
-  "version": "0.0.6",
+  "version": "1.0.0",
   "scripts": {
     "test": "mocha --harmony --harmony_default_parameters ./r.js",
     "lint": "./node_modules/.bin/eslint --cache=true --cache-location=.eslint  --fix ./",
