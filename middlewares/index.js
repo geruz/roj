@@ -1,9 +1,10 @@
 'use strict';
 
-const {rojModule, defaultWindowFactory, setEngine} = require('./react');
+const {rojModule, defaultWindowFactory, defaultDocumentFactory, setEngine} = require('./react');
 
 module.exports = {
     rojModule,
     defaultWindowFactory,
+    defaultDocumentFactory,
     setEngine,
 };

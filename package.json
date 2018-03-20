@@ -1,11 +1,29 @@
 {
-  "name": "roj",
-  "version": "1.0.0",
-  "scripts": {
-    "test": "mocha --harmony --harmony_default_parameters ./r.js",
-    "lint": "./node_modules/.bin/eslint --cache=true --cache-location=.eslint  --fix ./",
-    "pre-commit": "npm run lint && npm run unit-test && npm run integrated-test"
+  "_from": "roj@1.0.0",
+  "_id": "roj@1.0.0",
+  "_inBundle": false,
+  "_integrity": "sha512-CFFOk3i55khvKmGh6VDA4qQm7YMxVAiC7qx4yA73cVtBEe2MW8ct+Zjt/qq81Q7MW8vBYh4gjQJaV0RnpTzAyA==",
+  "_location": "/roj",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "roj@1.0.0",
+    "name": "roj",
+    "escapedName": "roj",
+    "rawSpec": "1.0.0",
+    "saveSpec": null,
+    "fetchSpec": "1.0.0"
   },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "http://npm.corp.24au:4873/roj/-/roj-1.0.0.tgz",
+  "_shasum": "75bb412bdd98efdd0926db65f1b08e1c0f185ca5",
+  "_spec": "roj@1.0.0",
+  "_where": "/Users/Geruz/projects/nodejs/aurum-js",
+  "bundleDependencies": false,
   "dependencies": {
     "babel-core": "^6.25.0",
     "babel-plugin-syntax-object-rest-spread": "^6.13.0",
@@ -19,6 +37,7 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
   },
+  "deprecated": false,
   "devDependencies": {
     "babel-cli": "^6.11.4",
     "babel-eslint": "^6.1.2",
@@ -27,5 +46,12 @@
     "eslint-plugin-babel": "^3.3.0",
     "eslint-plugin-react": "^3.16.1",
     "mocha": "^3.2.0"
-  }
+  },
+  "name": "roj",
+  "scripts": {
+    "lint": "eslint --cache=true --cache-location=.eslint  --fix ./",
+    "pre-commit": "npm run lint && npm run unit-test && npm run integrated-test",
+    "test": "mocha --harmony --harmony_default_parameters ./r.js"
+  },
+  "version": "1.0.0"
 }

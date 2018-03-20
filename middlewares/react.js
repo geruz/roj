@@ -4,9 +4,16 @@ const loader = require('../server-render/dir-loader');
 
 /*eslint-disable no-param-reassign */
 let defWindowFactory = (req, res) => ({});
+let defDocumentFactory = (req, res) => ({});
+
 const defaultWindowFactory = f => {
     defWindowFactory = f;
 };
+
+const defaultDocumentFactory = f => {
+    defDocumentFactory = f;
+};
+
 let engine = 'react';
 const setEngine = e => {
     if (e !== 'react' && e !== 'roj') {
@@ -15,7 +22,7 @@ const setEngine = e => {
     engine = e;
 };
 
-const rojModule = (name, {windowFactory = defWindowFactory} = {}) => {
+const rojModule = (name, {windowFactory = defWindowFactory, documentFactory = defDocumentFactory} = {}) => {
     const rojComponents = loader({engine, module: name});
     return (...directories) => {
         const hash = rojComponents(...directories);
@@ -26,13 +33,16 @@ const rojModule = (name, {windowFactory = defWindowFactory} = {}) => {
                 return `roj:${id}_${idCounters[id]}`;
             };
             const render = name => data => {
-                const pr = global.window;
+                const wind = global.window;
+                const doc = global.document;
                 const id = nextId(name);
                 try {
                     global.window = windowFactory(req, res);
+                    global.document = documentFactory(req, res);
                     return hash[name].render(data, id);
                 } finally {
-                    global.window = pr;
+                    global.window = wind;
+                    global.document = doc;
                 }
             };
             const decorRender = name => [name, render(name), hash[name].model];
@@ -51,5 +61,6 @@ const rojModule = (name, {windowFactory = defWindowFactory} = {}) => {
 module.exports = {
     rojModule,
     defaultWindowFactory,
+    defaultDocumentFactory,
     setEngine,
 };

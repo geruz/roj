@@ -78,7 +78,7 @@ class Tag {
     [toHtmlString](context) {
         const output = context.output;
         const {tag, children, attributes} = this;
-        
+
         if (children.length === 0) {
             switch (tag){
                 case 'area':
@@ -122,9 +122,8 @@ class EmptyTag {
         }
     }
 }
-
 const createElement = function (Cl, props, ...children) {
-    if (Cl instanceof Function) {
+        if (Cl instanceof Function) {
 
         if (Cl.defaultProps) {
             for (const key of Object.keys(Cl.defaultProps)) {
@@ -173,7 +172,7 @@ const createElement = function (Cl, props, ...children) {
         }
         if (value === null || value === undefined) {
             continue;
-        } 
+        }
         switch (attr){
             case 'dangerouslySetInnerHTML':
             case 'ref':
@@ -220,7 +219,7 @@ const createElement = function (Cl, props, ...children) {
                     attributes += ' checked=""';
                 }
                 break;
-            case 'disabled': 
+            case 'disabled':
                 if (value) {
                     attributes += ' disabled=""';
                 }
@@ -235,9 +234,9 @@ const createElement = function (Cl, props, ...children) {
     }
     return new Tag(Cl, attributes, children);
 };
-    
 
-    
+
+
 module.exports.createElement = createElement;
 module.exports.Component = Component;
 module.exports.PureComponent = Component;

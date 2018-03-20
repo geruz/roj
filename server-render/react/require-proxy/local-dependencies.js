@@ -2,12 +2,10 @@
 
 const fs = require('fs');
 
-
 const dependents = new Map();
 const watchingFiles = new Set();
 const watchRoots = new Set();
 const dependentRoots = new Set();
-
 
 const addDependency = (from, who) => {
     const s = dependents.get(from) || new Set();

@@ -4,7 +4,11 @@
 const path = require('path');
 const fs = require('fs');
 const mod = require('module');
-const {renderToString} = require('react-dom/server');
+let getRenderToString = () => {
+    const {renderToString} = require('react-dom/server');
+    getRenderToString = () => renderToString;
+    return renderToString;
+}
 
 const toHtmlString = Symbol.for('toHtmlString');
 const {ignoreExtensions, watchDependencies} = require('./require-proxy');
@@ -38,26 +42,26 @@ class Context {
 
 
 class LoadedReactComponent {
-    constructor (name, func, json) {
+    constructor (name, comp, json) {
         this.name = name;
         this.rojJson = json;
-        this.func = func;
+        this.comp = comp;
     }
     render (model) {
         const el = {};
-        const res = this.func(model, el);
-        return renderToString(res);
+        const res = this.comp(model, el);
+        return getRenderToString()(res);
     }
 }
 class LoadedRojComponent {
-    constructor (name, func, json) {
+    constructor (name, comp, json) {
         this.name = name;
         this.rojJson = json;
-        this.func = func;
+        this.comp = comp;
     }
     render (model) {
         const el = {};
-        const res = this.func(model, el);
+        const res = this.comp(model, el);
         if (res) {
             const context = new Context();
             res[toHtmlString](context);
